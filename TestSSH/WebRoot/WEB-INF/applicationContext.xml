@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/context 
+		http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+	<context:property-placeholder location="/WEB-INF/database.properties"/>
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close" lazy-init="false">
+		<property name="driverClass" value="${DB.driverclass}"></property>
+		<property name="jdbcUrl" value="${DB.jdbcurl}"></property>
+		<property name="user" value="${DB.user}"></property>
+		<property name="password" value="${DB.password}"></property>
+		
+		<property name="acquireIncrement" value="${SQL.public.acquireIncrement}"></property>  <!-- 当连接池中的连接用完时，C3P0一次性创建新连接的数目2 -->
+		<property name="initialPoolSize" value="${SQL.public.initialPoolSize}"></property>  <!-- 初始化时创建的连接数，必须在minPoolSize和maxPoolSize之间 -->
+		<property name="minPoolSize" value="${SQL.public.minPoolSize}"></property>
+		<property name="maxPoolSize" value="${SQL.public.maxPoolSize}"></property>
+		<property name="maxIdleTime" value="${SQL.public.maxIdleTime}"></property><!-- 最大空闲时间，超过空闲时间的连接将被丢弃[需要注意：mysql默认的连接时长为8小时(28800）【可在my.ini中添加 wait_timeout=30(单位秒)设置连接超时】,这里设置c3p0的超时必须<28800]-->
+		<property name="idleConnectionTestPeriod" value="${SQL.public.idleConnectionTestPeriod}"></property> <!-- 每60秒检查连接池中的空闲连接 -->
+		<property name="maxStatements" value="${SQL.public.maxStatements}"></property>  <!-- jdbc的标准参数  用以控制数据源内加载的PreparedStatement数量，但由于预缓存的Statement属于单个Connection而不是整个连接 -->
+	</bean>
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+		<property name="dataSource">
+			<ref bean="dataSource" />
+		</property>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">
+					org.hibernate.dialect.MySQLDialect
+				</prop>
+				<prop key="hibernate.show_sql">
+					true
+				</prop>
+				<prop key="format_sql">true</prop>
+			</props>
+		</property>
+		<property name="mappingResources">
+			<list>
+				<value>com/wangab/model/Inde.hbm.xml</value></list>
+		</property>
+		</bean>
+		
+	<bean id="IndeDAO" class="com.wangab.dao.IndeDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="iservice" class="com.wangab.service.impl.IndeService">
+		<property name="indeDAO">
+			<ref bean="IndeDAO"/>
+		</property>
+	</bean>
+	<bean id="Taction" class="com.wangab.action.Taction">
+		<property name="service">
+			<ref bean="iservice"/>
+		</property>
+	</bean>
+	</beans>
