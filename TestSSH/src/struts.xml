@@ -4,7 +4,9 @@
 <constant name="struts2.ObjectFactory" value="spring"></constant>
 <package name="tac" extends="struts-default" namespace="/">
 	<interceptors>
+		<!-- 单个拦截器，如果只是用一个拦截器缺少defaultStack的话action将接受不到出啊递过来的参数，struts的是指的就是defaultStack拦截器 -->
 		<interceptor name="myintercepter" class="com.wangab.interceptor.TestInterceptor"></interceptor>
+		<!-- 拦截器栈，有很多拦截器组成 -->
 		<interceptor-stack name="myicptck">
 			<interceptor-ref name="myintercepter">
 			<!-- 
@@ -21,8 +23,11 @@
 	</global-results>
 	
 	<action name="tac" class="Taction" method="test">
-		<interceptor-ref name="myintercepter"></interceptor-ref>
-		<result name="success">/index.jsp</result>
+	<!-- 
+		<interceptor-ref name="myintercepter"></interceptor-ref><!-- -->
+	 -->
+	 	<interceptor-ref name="myicptck"></interceptor-ref>
+		<result name="success">/content.jsp</result>
 		<!-- 
 		<result name="error">/error.jsp</result>
 		 -->

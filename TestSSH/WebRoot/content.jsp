@@ -21,9 +21,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   </head>
   
   <body>
-    <form id="testform" action="tac.action" method="get">
-    	输入ID：<input id="id" name="id" >
-    	<input type="submit" value="提交">
-    </form>
+    这是<b style="color:blue;">正常</b>页面！<br>
   </body>
 </html>

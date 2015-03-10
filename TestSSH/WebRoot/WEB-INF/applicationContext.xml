@@ -56,7 +56,7 @@
 			<ref bean="IndeDAO"/>
 		</property>
 	</bean>
-	<bean id="Taction" class="com.wangab.action.Taction">
+	<bean id="Taction" class="com.wangab.action.Taction" scope="prototype">
 		<property name="service">
 			<ref bean="iservice"/>
 		</property>
