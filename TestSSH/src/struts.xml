@@ -24,7 +24,7 @@
 	
 	<action name="tac" class="Taction" method="test">
 	<!-- 
-		<interceptor-ref name="myintercepter"></interceptor-ref><!-- -->
+		<interceptor-ref name="myintercepter"></interceptor-ref>
 	 -->
 	 	<interceptor-ref name="myicptck"></interceptor-ref>
 		<result name="success">/content.jsp</result>
